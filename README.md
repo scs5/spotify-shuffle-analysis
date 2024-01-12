@@ -22,16 +22,16 @@ There are two main phases to this project.
 ### Normal Shuffle vs. Smart Shuffle
 I first looked at the distribution of the songs played in both normal shuffle as well as "smart" shuffle. I plot the distributions of each based on how recently the song was added to the playlist.
 <p align='center'>
-  <img src="./figures/default_shuffle_added_dist.png" height="350" />
-  <img src="./figures/smart_shuffle_added_dist.png" height="350" />
+  <img src="./figures/default_shuffle_added_dist.png" height="325" />
+  <img src="./figures/smart_shuffle_added_dist.png" height="325" />
 </p>
 The normal shuffle appears to be uniformly distributed with respect to the date the song was added, while the smart shuffle clearly biases towards more recently added songs. Both claims are supported by Chi Square goodness of fit tests.
 
 ### Monte Carlo Simulations
 Next, I perform truly random Monte Carlo simulations to find the distribution of repeated songs across multiple shuffled playthroughs. I compare this to my collected data as a test of randomness.
 <p align='center'>
-  <img src="./figures/simulated_repeated_song_dist.png" height="350" />
-  <img src="./figures/observed_repeated_song_dist.png" height="350" />
+  <img src="./figures/simulated_repeated_song_dist.png" height="325" />
+  <img src="./figures/observed_repeated_song_dist.png" height="325" />
 </p>
 The observed data doesn't seem to follow the distribution if the shuffling were truly random. This is also supported by a goodness of fit test.<br><br>
 
