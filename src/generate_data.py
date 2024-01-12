@@ -5,11 +5,6 @@ from spotipy.oauth2 import SpotifyOAuth
 import time
 import pandas as pd
 
-# Constants
-PLAYLIST_NAME = 'sma'
-PERCENTAGE_PLAYLIST_TO_PLAY = 0.1
-SECONDS_BETWEEN_SONGS = 1
-
 
 def load_authorization_keys():
     """ Load environment variables (client keys) from .env file.
@@ -87,7 +82,7 @@ def get_playlist_track_names(sp, user_id, playlist_id):
     return track_names
 
 
-def log_playthrough_data(playlist_name, percentage_to_play, seconds_delay):
+def log_playthrough_data(playlist_name, percentage_to_play, seconds_delay, save_fn='./data/playthrough.csv'):
     """
     Play through a Spotify playlist and log the songs and their indices in the playlist to a csv file.
 
@@ -128,7 +123,8 @@ def log_playthrough_data(playlist_name, percentage_to_play, seconds_delay):
             time.sleep(seconds_delay)
 
         # Log output to csv
-        df.to_csv('./data/playthrough.csv')
+        df.drop_duplicates(inplace=True)
+        df.to_csv(save_fn)
 
 
 def add_playlist_positions(fn, playlist_name):
@@ -149,13 +145,21 @@ def add_playlist_positions(fn, playlist_name):
     df['playlist_pos'] = None
     for i, row in df.iterrows():
         track_name = row['track_name']
-        playlist_pos = track_names.index(track_name) + 1
+        playlist_pos = track_names.index(track_name) + 1 
+
         df.at[i, 'playlist_pos'] = playlist_pos
 
     # Output to csv file
     df.to_csv(fn)
 
 
+def log_multiple_playthroughs(playlist_name, percentage_to_play, seconds_delay, num_playthroughs, save_name='./data/playthrough'):
+    for i in range(num_playthroughs):
+        save_fn = save_name + '_' + str(i+1) + '.csv'
+        log_playthrough_data(playlist_name, percentage_to_play, seconds_delay, save_fn)
+
+
 if __name__ == '__main__':
-    log_playthrough_data(PLAYLIST_NAME, PERCENTAGE_PLAYLIST_TO_PLAY, SECONDS_BETWEEN_SONGS)
+    log_playthrough_data(playlist_name='sma', percentage_to_play=0.1, seconds_delay=0.5)
     add_playlist_positions('./data/smart_shuffle_playthrough.csv', PLAYLIST_NAME)
+    log_multiple_playthroughs(playlist_name='weeb', percentage_to_play=0.2, seconds_delay=0.5, num_playthroughs=50)
